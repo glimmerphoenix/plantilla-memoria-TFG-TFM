@@ -1,3 +1,6 @@
+% !TeX TXS-program:compile = txs:///xelatex/[--shell-escape]
+% !TeX TXS-program:bibliography = txs:///biber
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %% Plantilla de memoria en LaTeX para TFG/TFM - Universidad Rey Juan Carlos
 %%
@@ -11,221 +14,640 @@
 %%  etc. Muchas gracias a todos)
 %%
 %% La última versión de esta plantilla está siempre disponible en:
-%%     https://github.com/glimmerphoenix/plantilla-memoria
+%%     https://github.com/glimmerphoenix/plantilla-memoria-TFG-TFM
 %%
 %% - Ejecución en sistema local:
-%% Para obtener el documento en PDF, ejecuta en la shell:
-%%   make
+%% Para obtener el documento en PDF, se recomienda compilarlo con un editor
+%% como TeXStudio (https://www.texstudio.org/) en las dos primeras líneas
+%% de este archivo se incluyen ya las directrices para que el documento se
+%% compile correctamente con esta herramienta.
 %%
-%% A diferencia de la anterior versión, que usaba la herramienta pdfLaTeX 
-%% para compilar el documento, esta nueva versión de la plantilla usa
-%% XeLaTeX. Es un compilador más moderno que, entre otras mejoras, incluye
-%% soporte nativo para caracteres con codificación UTF-8, traducción políglota
-%% de referencias (usando Biblatex) y soporte para fuentes OTF. Esta última
-%% característic permite, por ejemplo, insertar iconos de la colección 
-%% Fontawesome en el texto.
+%% - %TODO: incluir un fichero makefile para facilitar la compilación
+%%   en línea de comandos. 
+%%
+%% - Esta plantilla se compila utilizando el motor XeLaTeX. Es un compilador
+%% de LaTeX más moderno que, entre otras mejoras, incluye soporte nativo para
+%% codificación de caracteres Unicode (UTF-8), traducción políglota de referencias
+%% (en combinación con  BibLaTex) y soporte para fuentes OpenTrueFonts (OTF)
+%% instaladas previamente en el sistema. Esta última característic permite, por 
+%% ejemplo, insertar iconos de la colección Fontawesome en el texto, o también
+%% utilizar cualquiera de las tipografías de la colección Google Fonts.
 %%
 %% XeLaTeX viene ya incluido en todas las distribuciones modernas de LaTeX.
 %%
+%% - Todas las pruebas con este documento se han realizado empleando la distribución
+%% de LaTeX TexLive (https://www.tug.org/texlive/)
+%%
+%% - IMPORTANTE: Esta plantilla usa XeLaTeX, BibLaTeX y el paquete minted, que
+%% necesita el paquete python3-pygments instalado en tu sistema. También se pueden 
+%% usar tipografías OTF o TrueType, siempre que estén instaladas en el sistema.
+%%
+%% Versión de TeX Live: 2024
+%% Versión de LaTeX: LaTeX2e
+%%
 %% - Edición y ejecución en línea: 
-%% Puedes descargar y subir la plantilla a
-%% Overleaf, un editor de LaTeX colaborativo en línea. Overleaf ya tiene
+%% Puedes descargar y subir la plantilla a una plataforma como Overleaf (https://www.overleaf.com/)
+%% de edición colaborativa de LaTeX en línea. Overleaf ya tiene 
 %% instalados todos los paquetes LaTeX y otras dependencias software para
 %% que esta plantilla compile correctamente.
 %%
-%% IMPORTANTE: Si compilas este documento en Overleaf, recuerda cambiar
+%% NOTA 1: Si compilas este documento en Overleaf, recuerda cambiar
 %% la configuración (botón "Menu" en la esquina superior izquierda de la interfaz)
 %% y elegir la opción Compiler --> XeLaTeX. En caso contrario no funcionará.
 %%
-%% - Nota: las imágenes deben ir en PNG, JPG, EPS o PDF. También se pueden usar
-%% imágenes en otros formatos con algunos cambios en el preámbulo del documento.
+%% NOTA 2: Overleaf está restringiendo paulatinamente los recursos disponibles
+%% para cuentas gratuitas. Es altamente recomendable usar una cuenta pro para
+%% garantizar que los documentos más complejos compilen con éxito. 
+%%
+%% NOTA 3: las imágenes que incluuyas deben estar en formato PNG, JPG, EPS o PDF. También 
+%% se pueden usar imágenes en otros formatos, pero se requieren algunos cambios en el 
+%% preámbulo del documento.
+%%
+%% - Se aceptan peticiones de nuevas funcionalidades (feature requests) o contribuciones
+%% (pull requests) a través del sitio del proyecto en GitHub.
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\documentclass[a4paper, 12pt]{book}
+\RequirePackage[l2tabu,orthodox]{nag} % turn on warnings because of bad style
 
-%%-- Geometría principal (dejar activada la siguiente línea en la versión final)
-\usepackage[a4paper, left=2.5cm, right=2.5cm, top=3cm, bottom=3cm]{geometry}
-%%-- Activar esta línea y comentar la anterior en modo borrador, para comentarios al margen
-%\usepackage[a4paper, left=2.5cm, right=2.5cm, top=3cm, bottom=3cm, marginparwidth=60pt]{geometry}
+% We use scrbook document class, part of the KOMA-Script bundle
+% Main link: https://ctan.org/pkg/koma-script
+% Guía rápida (algo antigua): https://webs.um.es/jal/docs/05-Koma.pdf
 
-%%-- Hay que cargarlo antes que las traducciones
-\usepackage{listing}                    % Listados de código
+% Quick tips for DIV global option values
+% https://tex.stackexchange.com/questions/183172/koma-script-typearea-and-div
+\documentclass[
+paper=a4,
+fontsize=12pt,
+% Replace twoside with oneside if you are printing your doc in single-side
+% paper or for viewing on screen.
+%oneside,
+twoside,
+openright,                  % Always start new chapter on right page
+titlepage,                  % Customize titlepage
+headsepline,                % Add header separating line
+%footsepline,               % Add footer separating line
+%https://tex.stackexchange.com/questions/114570/koma-script-scrpage2-footer-height
+footheight=16pt,            % Set up footer height
+parskip=half+,				% Space between paragraphs: full, full+, half, half+
+numbers=noenddot,			% Remove end dot in headers numbering
+%chapterprefix=true,		% Include prefix for chapter headings
+%appendixprefix=true,		% Include prefix for appendix headings
+headinclude=true,           % Include page header
+footinclude=true,           % Include page footer
+cleardoublepage=empty,      % Use empty (blank) for page padding
+captions=tableheading,      % Table captions are placed above -> calculate skip
+BCOR=5mm, 				    % Set binding correction if necessary
+%BCOR=0mm,                  % Uncomment for no biding extra margin (symmetric layout)
+DIV=11    			        % =calc --> calculate optimal page layout;
+% =x --> set x to a value in [6,15]
+%mpinclude=true,			% width = textwidth
+usegeometry=true			% Let typearea translate layout changes to geometry
+]{scrbook}
 
-% Traducciones en XeLaTeX
-\usepackage{polyglossia}
-\setmainlanguage{spanish}    % Comenta esta línea si tu memoria es en inglés
+%%--------------------------------------
+% KOMA CLASSES
+%%--------------------------------------
+%
+% The class "scrartcl" is one of the so-called KOMA-classes, a set of
+% very well done LaTeX-classes that produce a very European layout
+% (e.g. titles with a sans-serif font).
+% 
+% The KOMA classes have extensive documentation that you can access
+% via the commands:
+%   texdoc scrguide # in German
+%   texdoc scrguien # in English
+%   
+%
+% The available classes are:
+%
+% scrartcl - for "articles", typically for up to ~20 pages, the
+%            highest level sectioning command is \section
+%
+% scrreprt - for "reports", typically for up to ~200 pages, the
+%            highest level sectioning command is \chapter
+%
+% scrbook  - for "books", for more than 200 pages, the highest level
+%            sectioning command is \part.
+%
+% USEFUL OPTIONS
+%
+% a4paper  - Use a4 paper instead of the default american letter
+%            format.
+%
+% 11pt, 12pt, 10pt 
+%          - Use a font with the given size.
+%
+% bibtotoc - Add the bibliography to the table of contents
+%
+% The KOMA-script classes have plenty of options to modify
 
-% Traducciones particulares para español
-% Caption tablas
-\gappto\captionsspanish{
-	\def\tablename{Tabla}
-	\def\listingscaption{Código}
-	\def\refname{Bibliografía}
-	\def\appendixname{Apéndice}
-	\def\listtablename{Índice de tablas}
-	\def\listingname{Código}
-	\def\listlistingname{Índice de fragmentos de código}
+%%--------------------------------------------------------------------
+
+% Page layout and linespread
+
+% Line and page breaking
+\sloppy
+\clubpenalty = 10000
+\widowpenalty = 10000
+\brokenpenalty = 10000
+
+% At least +5% extra linespread for Palatino-like font
+% Example: Tex Gyre Pagella is an open source Palatino-like font
+\linespread{1.07}
+% TODO: DOCUMENT THIS OPTION
+%\KOMAoptions{DIV=last}
+% Uncomment to adjust blank space between consecutive lines to one blank line
+%%\setlength{\parskip}{\baselineskip}1\normalsize
+% Uncomment to use advanced packages to manage indentation and blank spaces
+%\usepackage[indent,parfill]{parskip}
+\usepackage{ragged2e}				% Enhanced ragged commands
+
+% --------------------------------------------------------------------
+% GEOMETRY
+% --------------------------------------------------------------------
+% IMPORTANT: documentclass option usegeometry must be set to true
+% to use the LaTeX package geometry for defining typesetting area dimensions
+
+% Verbose option is for debuggin purposes
+\usepackage[verbose]{geometry}
+
+% Uncomment package for layout debugging (printing layout params values)
+\usepackage{layouts}
+
+% Default page layout with generous side margin
+\RequirePackage{typearea}
+
+% Uncomment to increase vertical text area in main body of page layout
+%\setlength{\textheight}{1.2\textheight}
+% Another option from KOMA-Script doc: \areaset[BCOR]{width}{height} macro
+
+%%%-- Adjusting text area size
+%%% NOTE: Increment the last param to increase vertical text area size
+
+% From R. Bringhurst: prop. 1:1.6 (approx. 1:\phi) --> 82-86 chars./line w/ Tex Gyre Pagella font
+\areaset[current]{\textwidth}{1.6\textwidth}
+
+% From R. Bringhurst: prop. 1:1.414 (sqrt(2)) corresponds to A4 ISO standard.
+% With Times New Roman (narrow font) this leads to long lines (80-85 chars./line)
+% With Tex Gyre Pagella (more pleasant font, inspired by Palatino) this leads to 70-75 chars./line.
+%\areaset[current]{\textwidth}{1.414\textwidth}
+
+% Layout for Palatino font from Classic Thesis
+% \areaset[current]{320pt}{732pt} % ~ 336 * factor 2 + 33 head + 42 \the\footskip 
+% \areaset{336pt}{761pt} % 686 (factor 2.2) + 33 head + 42 head \the\footskip 10pt  
+
+%%%-- Margin notes
+
+% Adjust side margin width and separation
+%\setlength{\marginparwidth}{4em}%
+%\setlength{\marginparsep}{2em}%
+
+% http://latexref.xyz/Marginal-notes.html
+
+% Minimum vertical space between notes;            
+% Separation marginpars by a line's worth of space.
+\setlength\marginparpush{4pt}
+
+% http://latexref.xyz/Marginal-notes.html
+% Minimum vertical space between notes;            
+% Separation marginpars by a line's worth of space.
+%\setlength\marginparpush{4pt}
+
+%%% ---- Geometry debugging
+
+% DEBUGGING GEOMETRY, uncomment next line
+%\geometry{showframe} % display margins for debugging page layout
+
+
+% --------------------------------------------------------------------
+% SIDENOTES
+% --------------------------------------------------------------------
+
+% Project marginal notes a third of the way into the normal margin
+% cf. page 44 KOMA-Script manual. Use together with class option
+% mpinclude=true
+% \setlength{\marginparwidth}{1.67\marginparwidth}
+
+% Try this package from KOMA-Script author for margin notes
+%\usepackage{marginnote}
+
+% More powerful margin notes
+% Already loads package marginnote
+\usepackage{sidenotes}
+% Customize sidenotes font size --> \footnotesize
+% Source: https://tex.stackexchange.com/questions/361622/changing-sidenote-size
+\makeatletter
+\RenewDocumentCommand\sidenotetext{ o o +m }{%      
+    \IfNoValueOrEmptyTF{#1}{%
+        \@sidenotes@placemarginal{#2}{\footnotesize\textsuperscript{\thesidenote}{}~\footnotesize#3}%
+        \refstepcounter{sidenote}%
+    }{%
+        \@sidenotes@placemarginal{#2}{\textsuperscript{#1}~#3}%
+    }%
 }
+\makeatother
 
-%% Tipografía y estilos
-\usepackage[OT1]{fontenc}               % Keeps eulervm happy about accents encoding
+% --------------------------------------------------------------------
+% CAPTIONS
+% --------------------------------------------------------------------
 
-% Símbolos y fuentes matemáticas elegantes: Euler virtual math fonts
-% ¡Importante! Carga siempre las fuentes math AMS Euler ANTES QUE fontspec
-\usepackage{amsmath}
-\usepackage{amssymb}
-\usepackage[OT1,euler-digits,euler-hat-accent,small]{eulervm}
+% Captions beside figures (located in the side margin)
+% https://tex.stackexchange.com/questions/318151/koma-script-and-sidenotes-how-to-format-side-margin-caption-and-its-caption
 
-% En XeLaTeX las fuentes se especifican con fontspec
-\usepackage{fontspec}
-\defaultfontfeatures{Scale=MatchLowercase, Ligatures=TeX}     % Default option in font config
+\usepackage[hypcap=true]{caption}   	% Correctly placed anchors for hyperlinks
+%\usepackage{floatrow}               	% Set up captions of floats
+%x\usepackage{marginfix}             	% Make marginpars float freely
+\usepackage{scrlayer-scrpage}       	% Customise head and foot regions
+%\usepackage[footnote]{snotez}       	% Footnotes as sidenotes
 
-% Fix para fuentes usadas con operadores y \mathrm
-\DeclareSymbolFont{operators}{\encodingdefault}{\familydefault}{m}{n}
+% More floats
+\extrafloats{100}
 
-% Configura la fuente principal (serif): MinionPro
-\setmainfont[Scale=0.96]{TeX Gyre Pagella}
-% Configura la fuente sans-serif (\sffamily)
-\setsansfont[Scale=MatchLowercase]{Lato}
-% Configura la fuente para letra monoespaciada: Source Code Pro, escala 0.85
-\setmonofont[Scale=0.85]{Source Code Pro}
+% --------------------------------------------------------------------
+% TYPOGRAPHIES (FONTS)
+% --------------------------------------------------------------------
 
-%%-- Familias de fuentes específicas
-%%-- Se pueden definir etiquetas para familias de fuentes personalizadas
-%%-- que luego puedes emplear para cambiar el formato de una parte de texto
-%%-- Ejemplo:
-% \newfontfamily{\myriadprocond}{Myriad Pro Semibold Condensed.otf}
+% TODO: Lots of warnings produced by microtype, investigate why
+% Keep the following line commented for now
+%\usepackage[protrusion=true,final]{microtype} % Improve paragraph aspect in pdflatex
 
-%%-- Opciones de interlineado y espacios
-\linespread{1.07}                   % Aumentar interlineado para fuentes tipo Palatino
-\setlength{\parskip}{\baselineskip} % Separar párrafos con línea en blanco
+% Math fonts config
+%% ------
+% Source: https://www.tug.org/TUGboat/tb31-2/tb98robertson.pdf
+%
+% Use mathspec if most of your maths needs are fulfilled by a pre-existing maths package
+% (such as mathpazo) but you would like your maths alphabets to be taken from the text font; 
+% alternatively, use unicode-math if you have an OpenType maths font that you would like to use for typesetting all
+% aspects of the mathematics.
+%
+%% ------
 
-%%-- Hipervínculos
-\usepackage{url}
+%\usepackage[intlimits]{amsmath}     % Provides all mathematical commands
+\usepackage{amssymb}                % Math symbols
+\usepackage{mathtools}              % More math symbols and environments; loads amsmath that should go before unicode-math
+% TODO: CHECK ERRORS WITH MATHSPEC AND SETTING CUSTOM MATH FONT
+% DISCOVERY: mathspec may have issues with recent versions of fontspec
+%\usepackage{mathspec}
 
-%%-- Gráficos y tablas
-\PassOptionsToPackage{
-    dvipdfmx,usenames,dvipsnames,
-    x11names,table}{xcolor}             % Definiciones de colores
-\PassOptionsToPackage{xetex}{graphicx}
+% Alternative package for setting math font
+\usepackage[math-style=ISO]{unicode-math}
 
-\usepackage{subfig}                     % Subfiguras
-\usepackage{pgf}
-\usepackage{svg}                        % Integración de imágenes en formato SVG
-\usepackage{float}                      % H para posicionar figuras
-\usepackage{booktabs}                   % Already loads package xcolor
-\usepackage{multicol}                   % multiple column layout facilities
-\usepackage{colortbl}                   % For coloured tables
+\usepackage{comment}
+% Load the right font packages for XeLaTeX or LuaTeX
+\usepackage{iftex}
 
-%%-- Bibliografía con Biblatex y Biber
-% Más info:
-% https://www.overleaf.com/learn/latex/Biblatex_bibliography_styles
-% https://www.overleaf.com/learn/latex/biblatex_citation_styles
-\usepackage[
-    backend=biber,
-    style=numeric,
-    sorting=nty
-    ]{biblatex}
-\addbibresource{memoria.bib}
-\DeclareFieldFormat{url}{\mkbibacro{URL}\addcolon\nobreakspace\url{#1}}
-%\usepackage[nottoc, notlot, notlof, notindex]{tocbibind} %% Opciones de índice
+\ifXeTeX
+\usepackage[]{fontspec}
+\else
+\usepackage{luatextra}
+\fi
+%\defaultfontfeatures{Scale=MatchLowercase, Ligatures=TeX}
 
-%%-- Matemáticas e ingeniería
-% El paquete units permite mostrar unidades correctamente
-% Permite escribir unidades con espaciado y estilo de fuente correctos
-\usepackage[ugly]{units}         
-% Ejemplo de uso: $\unit[100]{m}$ or $\unitfrac[100]{m}{s}$
-% Entornos matemáticos
-\newtheorem{theorem}{Theorem}
+%% Set up main document fonts
+%\setmainfont[]{TeX Gyre Pagella}	     % Similar to Palatino
+\setmainfont[]{Times New Roman}
+\setsansfont[]{Lato}                     % Sans-serif font, alt [Scale=0.9]
+\setmonofont[]{Source Code Pro Medium}   % Monospaced font, alt [Scale=0.9]
+% TODO: CHECK ERRORS WITH MATHSPEC AND SETTING CUSTOM MATH FONT
+%% Math font
+\setmathfont[]{TeX Gyre Pagella Math}    % Set math font
 
-% Paquetes adicionales
-\usepackage{url}                        %% Gestión correcta de enlaces
-\usepackage{float}                      %% H para posicionar figuras
-\usepackage[nottoc, notlot, notlof, notindex]{tocbibind}    %% Opciones de índice
-\usepackage{metalogo}                   %% Múltiples logos para XeLaTeX
+% Alternative: use package euler-math
+% Euler Math is an OTF clone of Hermann Zapf and Donald Knuth’s Euler font
+%
+% 1. Loads unicode-math with the math-style=upright option and sets Euler-Math as maths font
+%
+% 2. Checks at \begin{document} if packages amssymb or latexsym are loaded and
+%    issues warnings in case they are;
+% 3. It provides aliases for glyphs named differently in Unicode, so that latexsym or
+%    AMS names are also available;
+% 4. It defines some specific math characters \varemptyset (∅), etc.
 
-% Fuentes especiales y glifos
+% -------------------------------------------
+% Example: Here several variants of the Montserrat Google Font are configured
+% for different part, chapter, section and subseciton headers
+% You can use any other font that is installed in the system
+% -------------------------------------------
+% Custom fonts for headers and sections
+
+\newfontfamily\headerfont{Montserrat}[Scale=MatchUppercase]
+\newfontfamily\partfont{Montserrat}
+\newfontfamily\chapterfont{Montserrat}
+\newfontfamily\sectionfont{Montserrat-SemiBold}
+\newfontfamily\subsectionfont{Montserrat-Medium}
+\newfontfamily\subsubsectionfont{Montserrat-Medium}
+
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+
+% Special fonts and glyphs
 \usepackage{ccicons}                % Creative Commons icons
 \usepackage{metalogo}               % XeTeX logo
 \usepackage{fontawesome5}           % Fontawesome 5 icons
-\usepackage{adforn} 
+\usepackage{adforn}                 % Forns and glyphs
+
+% --------------------------------------------------------------------
+% LANGUAGE AND TRANSLATIONS
+% --------------------------------------------------------------------
+
+% Language translations in XeLaTeX
+\usepackage{polyglossia}
+%\setmainlanguage{english}          % When there is a single language
+\setdefaultlanguage{spanish}        % Default lang in multilang doc
+\setotherlanguages{english}         % Alt lang(s) in multilang doc
+% Custom translations in polyglossia
+% For additional options see the package manual 
+\gappto\captionsspanish{%
+\def\tablename{Tabla}% 
+\def\listingscaption{Código}%
+\def\refname{Referencias}%
+\def\appendixname{Apéndice}%
+\def\listtablename{Índice de tablas}%
+\def\listoflistingsname{Índice de listas de código}
+}
+
+% --------------------------------------------------------------------
+% GRAPHICS AND TABLES
+% --------------------------------------------------------------------
+
+% Load colour palettes
+% Need to pass correct options for booktabs to load the package
+\PassOptionsToPackage{dvipsnames,x11names,table}{xcolor}
+
+% Nice rules for tables. Usage \begin{tabular}\toprule ... \midrule ... \bottomrule
+\usepackage{booktabs}           % WARNING: this package already loads package xcolor
+\usepackage{multirow}           % multiple row/column layout facilities
+\usepackage{colortbl}           % For coloured tables
+%\usepackage{subcaption}        % Adv. subcaption management
+\usepackage{longtable}          % Tables spanning more than one page
+
+%%-- Graphs and colors
+%\usepackage{subfig}            % Subfigures
+\usepackage{pgf}
+\usepackage{graphicx}           % Embedding images
+\setkeys{Gin}{width=\linewidth,totalheight=\textheight,keepaspectratio}
+\graphicspath{{img/}}           % set paths for automated image search with \includegraphics{imagefile}
+
+%%-- Customized GSyC colours (taken from logo)
+\definecolor{GSyCblue}{RGB}{18,46,116} % Dark blue from GSyC logo (top part of fonts)
+\definecolor{GSyClightblue}{RGB}{74,146,212} % Light blue from GSyC logo (low part of "y")
+
+% --------------------------------------------------------------------
+% SECTION HEADINGS
+% --------------------------------------------------------------------
+
+% Here, we configure customized colours for different section headers
+
+%%-- Customize heading style
+%%%-- Custom part heading
+%\RedeclareSectionCommand[style=part,
+%                         beforeskip=0pt,
+%                         afterskip=6ex]{part}    	
+\renewcommand*\partformat{\partfont\color{GSyCblue}\scshape Parte \thepart\autodot\enskip}	% Skip \partname in part heading
+%%-- Configure fonts and colors for all other headings
+\addtokomafont{part}{\centering\partfont\color{GSyCblue}\scshape}
+\addtokomafont{chapter}{\chapterfont\color{GSyCblue}}
+\addtokomafont{section}{\normalfont\sectionfont\color{GSyCblue}}
+\addtokomafont{subsection}{\normalfont\subsectionfont\color{GSyCblue}}
+\addtokomafont{subsubsection}{\normalfont\subsubsectionfont\color{GSyCblue}}
+
+\newcommand\titlerule[1][1pt]{\rule{\textwidth}{#1}}
+\renewcommand\partlineswithprefixformat[3]{%
+    \Ifstr{#2}{}{}{\color{GSyCblue}\titlerule[1.5pt]\vspace{\baselineskip}\par\nobreak}%
+    #2#3\par\nobreak\vspace{\baselineskip}\titlerule[3pt]%
+}
+
+% --------------------------------------------------------------------
+% TABLE OF CONTENTS
+% --------------------------------------------------------------------
+
+% Adjust indentation in ToC (KOMA-Script style)
+
+% \RedeclareSectionCommands[tocdynnumwidth]{chapter,section,subsection}
+\RedeclareSectionCommand[
+tocnumwidth+=-6pt
+]{part}
+
+% Set space between chapter entry and rest of chapter contents
+\DeclareTOCStyleEntries[
+onstarthigherlevel= \vspace{0.5\baselineskip},
+%onstartlowerlevel= \vspace{\baselineskip}
+]{default}{section} % <- Higher level in report and book is chapter
+
+% Indent chapters and rest of sections to the right of part entries
+%\RedeclareSectionCommand[tocnumwidth=3.5em]{chapter}
+%\renewcommand\addchaptertocentry[2]{%
+    %	\Ifstr{#1}{}{%
+        %		\addtocentrydefault{chapter}{#1}{#2}%
+        %	}{%
+        %		\addtocentrydefault{chapter}{\hspace*{2em}#1}{#2}%
+        %}}
+
+% Prepend 'partname' to part entry in ToC
+\DeclareTOCStyleEntry[
+entrynumberformat=\entrynumberwithprefix{\partname},
+dynnumwidth
+]{tocline}{part}
+\newcommand\entrynumberwithprefix[2]{#1\enspace#2\hfill}
+
+%% --- Even more examples
+
+%% Prepend 'chaptername' to chapter entry in ToC
+%\usepackage{tocbasic}
+%\DeclareTOCStyleEntry[
+%entrynumberformat=\entrynumberwithprefix{\chaptername},
+%dynnumwidth
+%]{tocline}{chapter}
+%
+%% Fix appendices prefix
+%% https://tex.stackexchange.com/questions/515515/koma-script-write-appendix-in-the-table-of-contents
+%\newcommand\useprefix[2]{#1#2}
+%\newlength\appendixprefixwidth
+%
+%\NewDocumentCommand\appendixprefixintoc{}
+%{%
+%	\setlength\appendixprefixwidth{%
+%		\widthof{\usekomafont{chapterentry}\appendixname~}}% measure needed additional space
+%	\DeclareTOCStyleEntry
+%	[%
+%	entrynumberformat=\useprefix{\appendixname~},% add the prefix before the entrynumber
+%	numwidth+=\appendixprefixwidth% enlarge numwidth for level section
+%	]{default}{chapter}
+%	\DeclareTOCStyleEntries[%
+%	indent+=\appendixprefixwidth% enlarge indent for other levels
+%	]{default}{section,subsection,subsubsection,paragraph,subparagraph}
+%}
+%
+%\newcommand*{\appendixmore}{%
+%	\renewcommand*{\sectionformat}{%
+%		\appendixname~\thesection\autodot\enskip}%
+%	\renewcommand*{\sectionmarkformat}{%
+%		\appendixname~\thesection\autodot\enskip}%
+%	\addtocontents{toc}{\appendixprefixintoc}%
+%}
+
+% Uncomment the following lines if prefixes for chapters and appendices are included
+% Adjust section and subsection identation to compesate prefixes
+%\RedeclareSectionCommand[tocindent=5.3em]{section}
+%\RedeclareSectionCommand[tocindent=7.7em]{subsection}
+
+% --------------------------------------------------------------------
+% BIBLIOGRAPHY (Using BibLaTeX)
+% --------------------------------------------------------------------
+
+% https://www.overleaf.com/learn/latex/Biblatex_bibliography_styles
+% https://www.overleaf.com/learn/latex/biblatex_citation_styles
+
+\usepackage[
+backend=biber,
+style=numeric,
+sorting=nty
+]{biblatex}
+\addbibresource{memoria.bib}
+\DeclareFieldFormat{url}{\mkbibacro{URL}\addcolon\nobreakspace\url{#1}}
+
+% --------------------------------------------------------------------
+% FORMATTING STEM CONTENTS
+% --------------------------------------------------------------------
+
+% units package lets you set and display units
+\usepackage[ugly]{units}        % Allows you to type units with correct spacing and font style. 
+% Usage: $\unit[100]{m}$ or $\unitfrac[100]{m}{s}$
+
+%\usepackage{grffile}           % Allow including some images (like graphicx). Usage: \includegraphics{path/to/file}
+
+% Math environments
+\newtheorem{theorem}{Theorem}
+
+% --------------------------------------------------------------------
+% ADDITIONAL PACKAGES AND HACKS
+% --------------------------------------------------------------------
+
+\usepackage{url}                % Lets you typeset urls. Usage: \url{http://...}
+
+% Use \xpsace in macros to automatically insert space based on context. 
+% Usage: \newcommand{\es}{ESPResSo\xspace}
+\usepackage{xspace}             
+
+%\usepackage{epigraph}           % Typesetting relevant quotations after section heading
+
+%%%-- Some useful packages for adding test content
 
 % Blindtext
 % Opciones pangram, bible, random (defecto)
 \usepackage[pangram]{blindtext}
 % Lorem ipsum
 \usepackage{lipsum}
-% Kant lipsum
 \usepackage{kantlipsum}
 
-\usepackage{fancyvrb}               % Entornos verbatim extendidos
-	\fvset{fontsize=\normalsize}    % Tamaño de fuente por defecto en fancy-verbatim
-	
-% Configura listas (itemize, enumerate) con iconos personalizados
-% Fácil reinicio de numeración con enumerate
-% Info: http://ctan.org/pkg/enumitem
+%%%-- Verbatim environments
+
+\usepackage{fancyvrb}           % extended verbatim environments
+\fvset{fontsize=\normalsize}    % default font size for fancy-verbatim environments
+
+%%%-- Repositioning margin figures
+
+% Trick to place margin figures in correct page
+\usepackage{mparhack}
+% \usepackage{marginfix}		% Explore this package to fix probs. with marginotes
+
+% Set lists (itemize, enumerate) with customized icons
+% easy restart of number sequence in enumerate
+% http://ctan.org/pkg/enumitem
 \usepackage[shortlabels]{enumitem}
-% Usar \usageitem para configurar iconos personalizados en listas
+
 \newcommand{\usageitem}[1]{%
-	\item[%
-	{\makebox[2em]{\strut\color{GSyCblue} #1}}%
-	]
+    \item[%
+    {\makebox[2em]{\strut\color{GSyCblue} #1}}%
+    ]
 }
 
-%%-- Definición de colores personalizados
-% \definecolor{LightGrey}{HTML}{EEEEEE}
-% \definecolor{darkred}{rgb}{0.5,0,0}     %% Refs. cruzadas
-% \definecolor{darkgreen}{rgb}{0,0.5,0}   %% Citas bibliográficas
-% \definecolor{darkblue}{rgb}{0,0,0.5}    %% Hiperenlaces ordinarios (también ToC)
+% --------------------------------------------------------------------
+% COLOURED BOXES
+% --------------------------------------------------------------------
 
-%%-- Configuración fragmentos de código
-%%-- Minted necesita Python Pygments instalado en el sistema para funcionar
-%%-- En Overleaf ya está instalada esta dependencia
-% \usepackage[center, labelfont=bf]{caption}
-\usepackage{minted}
+% Colored boxes for information corners
+\usepackage{tcolorbox}% http://ctan.org/pkg/tcolorbox
 
-%%-- Se debe cargar aquí para evitar warnings
-\usepackage{csquotes}                   % Para traducciones con biblatex
+% Caja azul con título para información, explicaciones extra y detalles
+% Icons: \faInfoCircle \faBook \faBookmark
+\newtcolorbox{mybluebox}[1]{colback=darkblue!5!white,colframe=darkblue!75!black,
+fonttitle=\normalfont,title=#1}
 
-%%-- Glosario de términos
+% Caja verde para comentarios adicionales
+% Icons: \faComment \faCrosshairs
+\newtcolorbox{mygreenbox}[1]{colback=darkgreen!5!white,colframe=darkgreen!75!black,
+fonttitle=\normalfont,title=#1}
+
+% TODO: Yellow box with title for warnings
+
+% Caja roja con título para posibles problemas explicaciones extra y detalles
+% Icons: \faExclamationCircle \faBomb
+\newtcolorbox{myredbox}[1]{colback=darkred!5!white,colframe=darkred!75!black,
+fonttitle=\normalfont,title=#1}
+
+% Coloured equations
+
+\usepackage{empheq}
+
+% --------------------------------------------------------------------
+% SYNTAX HIGHLIGHTING
+% --------------------------------------------------------------------
+
+% Doc: https://ctan.org/pkg/minted
+\usepackage[chapter]{minted}
+
+% Add here custom short commands to colour inline code
+% TODO: INSERT AN EXAMPLE OF THIS USEFUL FEATURE
+
+% Source code listings
+\usepackage{listings}           % Source Code Listings. Usage: \begin{lstlisting}...\end{lstlisting}
+\lstset{
+    basicstyle=\ttfamily,
+    columns=fullflexible,
+    frame=single,
+    breaklines=true,
+    postbreak=\mbox{\textcolor{red}{$\hookrightarrow$}\space},
+}
+
+\lstloadlanguages{python}       % Default highlighting set to "python"
+% Fix issue with internal hacks in listings using deprecated KOMA-Script commands
+% See: https://tex.stackexchange.com/questions/51867/koma-warning-about-toc
+\usepackage[listings=false]{scrhack}
+
+\usepackage{csquotes} % Para traducciones con biblatex
+
+% --------------------------------------------------------------------
+% GLOSSARY
+% --------------------------------------------------------------------
+
 \usepackage[acronym]{glossaries}
 \makeglossaries
 \loadglsentries{glossary}
 
-% % Definición de cabeceras del documento, usando fancyhdr
-% \usepackage{fancyhdr}
-% %% Configuración de cabeceras para el cuerpo principal del documento
-% \pagestyle{fancy}
-% \fancyhead{}
-% \fancyhead[RO,LE]{\myriadprocond{\thepage}}
-% \renewcommand{\chaptermark}[1]{\markboth{\chaptername\ \thechapter.\ #1}{}}
-% \renewcommand{\sectionmark}[1]{\markright{\thesection.\ #1}}
-% \fancyhead[RE]{\myriadprocond{\leftmark}}
-% \fancyhead[LO]{\myriadprocond{\rightmark}}
-% \renewcommand{\headrulewidth}{0pt}
-% \setlength{\headheight}{15pt} %% Al menos 15pt para evitar warning al compilar
-% \fancyfoot{}
-% %% Configuración para páginas con cabecera en blanco
-% \fancypagestyle{plain}{%
-% \fancyhf{}% clear all header and footer fields
-% \fancyhead[RO,LE]{\myriadprocond{\thepage}}
-% \renewcommand{\headrulewidth}{0pt}%
-% \renewcommand{\footrulewidth}{0pt}%
-% }
+% --------------------------------------------------------------------
+% LINKS
+% --------------------------------------------------------------------
 
-%%-- Metadatos del doc
+% hyperref package is loaded at the end of the preamble to avoid conflicts
+\usepackage{hyperref}  	        % Provides clickable links in the PDF-document for \ref
+
+% --------------------------------------------------------------------
+% DOC METADATA
+% --------------------------------------------------------------------
+
 \title{Memoria del Proyecto}
 \author{Nombre del autor}
 
-%%-- Hiperenlaces, siempre se carga al final del preámbulo
-\usepackage[colorlinks]{hyperref}
+%% Config hyperlink options
+
 \hypersetup{
     pdftoolbar=true,	% Muestra barra de herramientas en Adobe Acrobat
 	pdfmenubar=true,	% Muestra menú en Adobe Acrobat
-	pdftitle={Título doc en ventana del visor o navegador},
+	pdftitle={Título del TFG/TFM},
 	pdfauthor={Nombre del alumno/a},
-	pdfcreator={ETSII/ETSIT, URJC},
+	pdfcreator={EIF, URJC},
 	pdfproducer={XeLaTeX},
 	pdfsubject={Topic1, Topic2, Topic3},
 	pdfnewwindow=true,              %links open in new window
@@ -246,15 +668,25 @@
 
 \begin{document}
 
-%%-- Configuración común para todos los entornos listing
-%%-- Descomentar para usar y personalizar valores
-%\lstset{%
-%breakatwhitespace=true,
-% breaklines=true, 
-% basicstyle=\footnotesize\ttfamily,
-% keywordstyle=\color{blue},
-% commentstyle=\color{green!40!black}, 
-% language=Python} 
+%---------------------------------------------------------------------
+
+%---------------------------------------------------------------------
+
+% KOMA-Script organization
+% Frontmatter (roman page numbering, among other default features)
+\frontmatter
+
+%---------------------------------------------------------------------
+
+%%--------------------------------------------------------------------
+
+% Declare new geometry for frontmatter if needed
+% IMPORTANT: Requires \usepackage{geometry}; invalidates DIV global option
+\newgeometry{margin=2.5cm}
+
+% --------------------------------------------------------------------
+% COVER PAGE
+% --------------------------------------------------------------------
  
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -262,42 +694,42 @@
 
 \begin{titlepage}
 \begin{center}
-\begin{tabular}[c]{c c}
-%\includegraphics[bb=0 0 194 352, scale=0.25]{logo} &
-\includegraphics[scale=1.5]{img/LogoURJC.png}
-%&
-%\begin{tabular}[b]{l}
-%\Huge
-%\textsf{UNIVERSIDAD} \\
-%\Huge
-%\textsf{REY JUAN CARLOS} \\
-%\end{tabular}
-\\
-\end{tabular}
 
-\vspace{3cm}
+\includegraphics[width=0.4\textwidth]{img/LogoURJC.png}
+
+\vspace{0.5cm}
 
 \Large 
-TITULACIÓN EN MAYÚSCULAS
+ESCUELA DE INGENIERÍA DE FUENLABRADA
 
-\vspace{0.4cm}
+\vspace{1.5cm}
+
+\Large 
+NOMBRE DE LA TITULACIÓN EN MAYÚSCULAS
+
+\vspace{1.5cm}
+
+\Large
+\textbf{TRABAJO FIN DE GRADO}
+
+\vspace{2cm}
+
+\large UN TÍTULO DE PROYECTO LARGO\\
+EN DOS LÍNEAS
+
+\vspace{1.5cm}
+
+\large
+Autor/a : Nombre del Alumno/a \\
+\vspace{0.5cm}
+Tutor/a : Dr. Nombre del Profesor/a
+
+\vspace{3cm}
 
 \large
 Curso Académico 20XX/20XX
 
-\vspace{0.8cm}
 
-Trabajo Fin de Grado/Máster
-
-\vspace{2cm}
-
-\LARGE UN TÍTULO DE PROYECTO LARGO\\
-EN DOS LÍNEAS
-\vspace{3cm}
-
-\large
-Autor/a : Nombre del Alumno/a \\
-Tutor/a : Dr. Nombre del Profesor/a
 \end{center}
 \end{titlepage}
 
@@ -418,6 +850,9 @@ As it is the translation of the ``Resumen'', which is supposed to be written at 
 %\markboth{TODO LIST}{TODO LIST} % encabezado
 %%%%--------------------------------------------------------------------
 
+% Ends custom geometry for the frontmatter if it was changed
+\restoregeometry
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 % ÍNDICES %
@@ -440,6 +875,18 @@ As it is the translation of the ``Resumen'', which is supposed to be written at 
 \cleardoublepage
 %%-- Índice de fragmentos de código
 \listoflistings
+
+%-------------------------------------------------------------------------------
+
+%-------------------------------------------------------------------------------
+% KOMA-Script organization
+% Mainmatter (arabic page numbering, among other default features)
+\mainmatter
+%-------------------------------------------------------------------------------
+
+%--- Begin main content
+
+%-------------------------------------------------------------------------------
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
@@ -788,8 +1235,15 @@ el compilador rehusa muchas veces romper la palabra y deja la línea demasiado l
 al resto.
 
 Para evitar esto, especialmente en párrafos más cortos de lo habitual (como en una lista
-no numerada), se puede utilizar el comando \mintinline{latex}{\begin{sloppypar}...\end{sloppypar}},
-como se muestra a continuación con un ejemplo real.
+no numerada), se puede utilizar el entorno:
+
+\begin{minted}{latex}
+    \begin{sloppypar}
+    ...
+    \end{sloppypar}
+\end{minted}
+
+Se muestra a continuación con un ejemplo real.
     
 \begin{itemize}
     
@@ -854,6 +1308,11 @@ Aquí viene lo que has aprendido en el Trabajo Fin de Grado/Máster.
 Ningún proyecto ni software se termina, así que aquí vienen ideas y funcionalidades que estaría bien tener implementadas en el futuro.
 
 Es un apartado que sirve para dar ideas de cara a futuros TFGs/TFMs.
+
+%---------------------------------------------------------------------
+% Backmatter: glossary, bibliography, indexes, etc.
+\backmatter
+%---------------------------------------------------------------------
 
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
