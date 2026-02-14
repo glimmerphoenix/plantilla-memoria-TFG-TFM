@@ -518,7 +518,13 @@ sorting=nty
 %\usepackage{grffile}           % Allow including some images (like graphicx). Usage: \includegraphics{path/to/file}
 
 % Math environments
-\newtheorem{theorem}{Theorem}
+% Aquí definimos las etiquetas que se mostrarán al invocar cada entorno matemático
+\newtheorem{theorem}{Teorema}
+\newtheorem{corollary}[theorem]{Corolario}
+\newtheorem{lemma}[theorem]{Lema}
+\newtheorem{definition}[theorem]{Definición}
+
+% Se pueden definir más etiquetas, en inglés u otros idiomas en el mismo documento.
 
 % --------------------------------------------------------------------
 % ADDITIONAL PACKAGES AND HACKS
@@ -944,8 +950,8 @@ As it is the translation of the ``Resumen'', which is supposed to be written at 
 % APÉNDICE(S) %
 %-------------------------------------------------------------------------------
 
-%\cleardoublepage
-%\appendix
+\cleardoublepage
+\appendix
 %\chapter{Manual de usuario}
 %\label{app:manual}
 
