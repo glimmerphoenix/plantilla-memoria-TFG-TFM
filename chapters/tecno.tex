@@ -49,8 +49,10 @@ Hemos hablado de cómo incluir figuras, pero no se ha descrito cómo incluir tab
 A continuación se presenta un ejemplo de tabla, la Tabla \ref{tabla:ejemplo} (fíjate 
 en cómo se introduce una referencia a la tabla).
 
-\begin{table}
+\begin{table}[htb]
     \begin{center}
+        \caption{Ejemplo de tabla. Aquí viene una pequeña descripción (el \emph{caption}) del contenido de la tabla. Si la tabla no es autoexplicativa, siempre viene bien aclararla aquí.}
+        \label{tabla:ejemplo}
         \begin{tabular}{ | l | c | r |} % tenemos tres colummnas, la primera alineada a la izquierda (l), la segunda al centro (c) y la tercera a la derecha (r). El | indica que entre las columnas habrá una línea separadora.
             \hline
             Uno & 2 & 3 \\ \hline % el hline nos da una línea vertical
@@ -58,9 +60,48 @@ en cómo se introduce una referencia a la tabla).
             Siete & 8 & 9 \\
             \hline
         \end{tabular}
-        \caption{Ejemplo de tabla. Aquí viene una pequeña descripción (el \emph{caption}) del contenido de la tabla. Si la tabla no es autoexplicativa, siempre viene bien aclararla aquí.}
-        \label{tabla:ejemplo}
     \end{center}
+\end{table}
+
+La Tabla \ref{tabla:ejemplo} utiliza un formato muy básico. En documentos más recientes, se suele utilizar
+un diseño de tabla con un estilo más legible, utilizando el paquete \texttt{booktabs} que se añade en el preámbulo
+del documento principal con el comando \mintinline{latex}|\usepackage{booktabs}|. Entre otros elementos de
+interés, este paquete evita el uso de líneas verticales para separar las columnas y define tres tipos de líneas 
+horizontales para construir nuestra tabla:
+
+\begin{itemize}
+    \item La línea superior, que delimita el comienzo de la tabla, con el comando \mintinline{latex}|toprule|.
+    
+    \item La línea intermedia, que separa el encabezado del contenido de la tabla, o diferentes secciones de
+    contenido en ésta. Se inserta con el comando \mintinline{latex}|midrule|.
+    
+    \item La línea inferior, que marca el final de la tabla, con el comando \mintinline{latex}|bottomrule|.
+\end{itemize}
+
+Veamos un ejemplo de este nuevo estilo, que se muestra en la Tabla \ref{tabla:ejemplo-booktabs}. Además, también
+se ilustra cómo emplear el paquete \texttt{multirow}, para gestionar filas o columnas que se expanden en múltiples
+celdas de la parrilla de diseño de la tabla.
+
+% Source: https://nhigham.com/2019/11/19/better-latex-tables-with-booktabs/
+
+\begin{table}[hb]
+    \centering
+    \caption{Segundo ejemplo de tabla, esta vez usando el estilo que define el paquete \texttt{booktabs}.}
+    \label{tbl:table-id}
+    % The @{} symbol reduce the space at the edges of some of the widest tables 
+    % by shortening the horizontal rules
+    
+    \begin{tabular}{@{}lcccccl@{}}\toprule
+        & \multicolumn{3}{c}{$\mathrm{tol}=u_{single}$} & \multicolumn{3}{c}{$\mathrm{tol}=u_{double}$}
+        \\\cmidrule(lr){2-4}\cmidrule(lr){5-7}
+        & $mv$  & Rel.~err & Time    & $mv$  & Rel.~err & Time\\
+        \midrule
+        trigmv    & 11034 & 1.3e-7 & 3.9 & 15846 & 2.7e-11 & 5.6 \\
+        trigexpmv & 21952 & 1.3e-7 & 6.2 & 31516 & 2.7e-11 & 8.8 \\
+        trigblock & 15883 & 5.2e-8 & 7.1 & 32023 & 1.1e-11 & 1.4e1\\
+        expleja   & 11180 & 8.0e-9 & 4.3 & 17348 & 1.5e-11 & 6.6 \\
+        \bottomrule
+    \end{tabular}
 \end{table}
 
 \section{Entorno de desarrollo: PyCharm}
