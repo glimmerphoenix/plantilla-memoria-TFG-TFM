@@ -1,0 +1,76 @@
+\chapter{Experimentos y validación}
+\label{chap:experimentos}
+
+\textbf{Atención}: Este capítulo se introdujo como requisito en 2019.
+
+Describe los experimentos y casos de test que tuviste que implementar para validar tus resultados. 
+Incluye también los resultados de validación que permiten afirmar que tus resultados son correctos.
+
+\section{Incorporación de código en la memoria}
+
+Es bastante habitual que se reproduzcan fragmentos de código en la memoria de un TFG/TFM.
+Esto permite explicar detalladamente partes del desarrollo que se ha realizado que se consideren
+de especial interés. No obstante, tampoco es conveniente pasarse e incluir demasiado código en
+la memoria, puesto que se puede alargar mucho el documento. Un recurso muy habitual es subir
+todo el código a un repositorio de un servicio de control de versiones como GitHub o GitLab,
+y luego incluir en la memoria la URL que enlace a dicho repositorio.
+
+Para incluir fragmentos de código en un documento \LaTeX se pueden combinar varias
+herramientas:
+
+\begin{itemize}
+    \item El entorno \mintinline{latex}{\begin{listing}[]...\end{listing}} permite crear
+    un marco en el que situar el fragmento de código (parecido al generado cuando insertamos
+    una tabla o una figura). Podemos insertar también una descripción (\textit{caption})
+    y una etiqueta para referenciarlo luego en el texto.
+    
+    \item Dentro de este entorno, se puede utilizar el paquete 
+    \mintinline{latex}{minted}~\footnote{\url{https://es.overleaf.com/learn/latex/Code_Highlighting_with_minted}},
+    que utiliza el paquete Python Pygments para resaltado de sintaxis (coloreando el
+    código). Como se puede ver en el siguiente ejemplo, hay muchas opciones de configuración
+    que permiten controlar cómo se va a mostrar el código (incluir números de línea, saltos
+    de línea, tamaño y tipo de fuente, espaciado, código de colores para resaltado, etc.).
+\end{itemize}
+
+\begin{listing}[h!]
+    \caption{Lectura de un fichero *.csv y tipado de datos.}{}
+    \label{lst:1}
+    \begin{minted}[breaklines, fontsize=\footnotesize, baselinestretch=1]{python}
+        # A dictionary is built to define the data type contained by each column
+        dtype_scheme ={'budget': np.int64, 'genres': np.object, 'homepage': np.str, 'id': np.int64, 'keywords': np.object, 'original_language': np.str, 'original_title': np.str, 'overview': np.str, 'popularity': np.float64, 'production_companies': np.object, 'production_countries': np.object, 'release_date': np.object, 'revenue': np.int64, 'runtime': np.float64, 'spoken_languages': np.object,  'status': np.object, 'tagline': np.str, 'title': np.str, 'vote_average': np.float64, 'vote_count': np.int64}
+        
+        # When loading the data from the .csv file, we provide the scheme to be followed for data typing
+        df1 = dd.read_csv('tmdb_5000_movies.csv', dtype=dtype_scheme)
+    \end{minted}
+\end{listing}
+
+Otra ventaja del entorno \verb|listing| es que se puede generar automáticamente un índice
+(con entradas hiperenlazadas) de fragmentos de código, para incluirlo al comienzo del 
+documento junto con los índices de figuras, tablas, etc.
+
+\subsection{Fuentes monoespaciadas}
+
+A veces se incluyen nombres de archivos, paquetes, etc. como texto monoespaciado, utilizando
+el comando \LaTeX \mintinline{latex}{\texttt{}}. Sin embargo, esto puede generar un problema
+cuando las palabras en fuente monoespaciada alcanzan el final de una línea. En ese caso,
+el compilador rehusa muchas veces romper la palabra y deja la línea demasiado larga respecto
+al resto.
+
+Para evitar esto, especialmente en párrafos más cortos de lo habitual (como en una lista
+no numerada), se puede utilizar el entorno:
+
+\begin{minted}{latex}
+    \begin{sloppypar}
+        ...
+    \end{sloppypar}
+\end{minted}
+
+Se muestra a continuación con un ejemplo real.
+
+\begin{itemize}
+    
+    \begin{sloppypar} % Arregla longitud de línea en párrafos con fuente monoespaciada
+        \item Los valores contenidos en las columnas \texttt{genres}, \texttt{spoken\_languages}, \texttt{production\_companies} y \texttt{production\_countries}, clasificados originalmente como \texttt{np.objects}, se corresponden en realidad con listas de objetos \gls{json} que han sido almacenadas como cadenas de caracteres. A través de la función \texttt{get\_values(obj, key)} definida específicamente para ello, se transformará dicha cadena de caracteres en una lista de diccionarios a través de la función \texttt{json.loads(obj)} y se devolverá una  tupla que recopile los valores de los mismos para la clave indicada, un objeto de Python mucho más manejable de cara a realizar consultas sobre el \textit{dataset}.
+    \end{sloppypar}
+    
+\end{itemize}

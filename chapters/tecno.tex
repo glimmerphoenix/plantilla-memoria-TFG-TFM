@@ -1,0 +1,84 @@
+\chapter{Estado del arte}               %% a.k.a "Tecnologías utilizadas"
+\label{chap:tecnologias}
+
+Descripción de las tecnologías que utilizas en tu trabajo. 
+Con dos o tres párrafos por cada tecnología, vale. 
+Se supone que aquí viene todo lo que no has hecho tú.
+
+Puedes citar libros, como el de Bonabeau et al., sobre procesos estigmérgicos~\cite{bonabeau:_swarm}. 
+Me encantan los procesos estigmérgicos.
+Deberías leer más sobre ellos.
+Pero quizás no ahora, que tenemos que terminar la memoria para sacarnos por fin el título.
+Nota que el \~ \ añade un espacio en blanco, pero no deja que exista un salto de línea. 
+Imprescindible ponerlo para las citas.
+
+Citar es importantísimo en textos científico-técnicos. 
+Porque no partimos de cero.
+Es más, partir de cero es de tontos; lo suyo es aprovecharse de lo ya existente para construir encima y hacer cosas más sofisticadas.
+¿Dónde puedo encontrar textos científicos que referenciar?
+Un buen sitio es Google Scholar\footnote{\url{http://scholar.google.com}}.
+Por ejemplo, si buscas por ``stigmergy libre software'' para encontrar trabajo sobre software libre y el concepto de \emph{estigmergia} (¿te he comentado que me gusta el concepto de estigmergia ya?), encontrarás un artículo que escribí hace tiempo cuyo título es ``Self-organized development in libre software: a model based on the stigmergy concept''.
+Si pulsas sobre las comillas dobles (entre la estrella y el ``citado por ...'', justo debajo del extracto del resumen del artículo, te saldrá una ventana emergente con cómo citar.
+Abajo a la derecha, aparece un enlace BibTeX.
+Púlsalo y encontrarás la referencia en formato BibTeX, tal que así:
+
+\clearpage
+{\footnotesize
+    \begin{minted}{bibtex}
+        @inproceedings{robles2005self,
+            title={Self-organized development in libre software:
+                a model based on the stigmergy concept},
+            author={Robles, Gregorio and Merelo, Juan Juli\'an 
+                and Gonz\'alez-Barahona, Jes\'us M.},
+            booktitle={ProSim'05},
+            year={2005}
+        }
+    \end{minted}
+}
+
+Copia el texto en BibTeX y pégalo en el fichero \texttt{memoria.bib}, que es donde están las referencias bibliográficas.
+Para incluir la referencia en el texto de la memoria, deberás citarlo, como hemos hecho antes con~\cite{bonabeau:_swarm}, lo que pasa es que en vez de el identificador de la cita anterior (bonabeau:\_swarm), tendrás que poner el nuevo (robles2005self).
+Compila el fichero \texttt{memoria.tex} (\texttt{pdflatex memoria.tex}), añade la bibliografía (\texttt{bibtex memoria.aux}) y vuelve a compilar \texttt{memoria.tex} (\texttt{pdflatex memoria.tex})\ldots y \emph{voilà} ¡tenemos una nueva cita~\cite{robles2005self}!
+
+También existe la posibilidad de poner notas al pie de página, por ejemplo, una para indicarte que visite la página del GSyC\footnote{\url{http://gsyc.es}}.
+
+\section{Sección 1} 
+\label{sec:seccion1}
+
+Hemos hablado de cómo incluir figuras, pero no se ha descrito cómo incluir tablas.
+A continuación se presenta un ejemplo de tabla, la Tabla \ref{tabla:ejemplo} (fíjate 
+en cómo se introduce una referencia a la tabla).
+
+\begin{table}
+    \begin{center}
+        \begin{tabular}{ | l | c | r |} % tenemos tres colummnas, la primera alineada a la izquierda (l), la segunda al centro (c) y la tercera a la derecha (r). El | indica que entre las columnas habrá una línea separadora.
+            \hline
+            Uno & 2 & 3 \\ \hline % el hline nos da una línea vertical
+            Cuatro & 5 & 6 \\ \hline
+            Siete & 8 & 9 \\
+            \hline
+        \end{tabular}
+        \caption{Ejemplo de tabla. Aquí viene una pequeña descripción (el \emph{caption}) del contenido de la tabla. Si la tabla no es autoexplicativa, siempre viene bien aclararla aquí.}
+        \label{tabla:ejemplo}
+    \end{center}
+\end{table}
+
+\section{Entorno de desarrollo: PyCharm}
+\label{sec:entorno_de_desarrollo}
+
+%%-- El comando \gls{} permite incluir términos en el glosario, para luego reunirlos todos
+%%-- en una tabla al comienzo o al final del documento, junto con sus definiciones.
+
+PyCharm es un \gls{ide} dedicado concretamente a la programación en Python y desarrollado por la compañía checa JetBrains.
+
+Proporciona análisis de código, un depurador gráfico, una consola de Python integrada, control de versiones y, además, soporta desarrollo web con Django. Todas estas características lo convierten en un entorno completo e intuitivo, idóneo para el desarrollo de proyectos académicos como el que nos ocupa.
+
+
+\section{Redacción de la memoria: LaTeX/Overleaf}
+\label{sec:redaccion_de_la_memoria}
+
+LaTeX es un sistema de composición tipográfica de alta calidad que incluye características especialmente diseñadas para la producción de documentación técnica y científica. Estas características, entre las que se encuentran la posibilidad de incluir expresiones matemáticas, fragmentos de código, tablas y referencias, junto con el hecho de que se distribuya como software libre, han hecho que LaTeX se convierta en el estándar de facto para la redacción y publicación de artículos académicos, tesis y todo tipo de documentos científico-técnicos. 
+
+Por su parte, Overleaf es un editor LaTeX colaborativo basado en la nube. Lanzado originalmente en 2012, fue creado por dos matemáticos que se inspiraron en su propia experiencia en el ámbito académico para crear una solución satisfactoria para la escritura científica colaborativa.
+
+Además de por su perfil colaborativo, Overleaf destaca porque, pese a que en LaTeX el escritor utiliza texto plano en lugar de texto formateado (como ocurre en otros procesadores de texto como Microsoft Word, LibreOffice Writer y Apple Pages), éste puede visualizar en todo momento y paralelamente el texto formateado que resulta de la escritura del código fuente.
