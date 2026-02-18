@@ -99,7 +99,7 @@ cleardoublepage=empty,      % Use empty (blank) for page padding
 captions=tableheading,      % Table captions are placed above -> calculate skip
 BCOR=5mm, 				    % Set binding correction if necessary
 %BCOR=0mm,                  % Uncomment for no biding extra margin (symmetric layout)
-DIV=11    			        % =calc --> calculate optimal page layout;
+DIV=9   			        % =calc --> calculate optimal page layout;
 % =x --> set x to a value in [6,15]
 %mpinclude=true,			% width = textwidth
 usegeometry=true			% Let typearea translate layout changes to geometry
@@ -185,8 +185,10 @@ usegeometry=true			% Let typearea translate layout changes to geometry
 %%%-- Adjusting text area size
 %%% NOTE: Increment the last param to increase vertical text area size
 
-% From R. Bringhurst: prop. 1:1.6 (approx. 1:\phi) --> 82-86 chars./line w/ Tex Gyre Pagella font
-\areaset[current]{\textwidth}{1.6\textwidth}
+% From R. Bringhurst: prop. 1:1.618 (approx. 1:\phi) --> 82-86 chars./line w/ Tex Gyre Pagella font
+% Add ~33 pts head + 42 pts \footskip
+%\areaset[current]{\textwidth}{1.76\textwidth}
+\areaset[current]{0.925\textwidth}{1.85\textwidth}
 
 % From R. Bringhurst: prop. 1:1.414 (sqrt(2)) corresponds to A4 ISO standard.
 % With Times New Roman (narrow font) this leads to long lines (80-85 chars./line)
