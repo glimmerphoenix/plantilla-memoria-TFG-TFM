@@ -78,7 +78,7 @@ horizontales para construir nuestra tabla:
     \item La línea inferior, que marca el final de la tabla, con el comando \mintinline{latex}|bottomrule|.
 \end{itemize}
 
-Veamos un ejemplo de este nuevo estilo, que se muestra en la Tabla \ref{tabla:ejemplo-booktabs}. Además, también
+Veamos un ejemplo de este nuevo estilo, que se muestra en la Tabla \ref{tbl:ejemplo-booktabs}. Además, también
 se ilustra cómo emplear el paquete \texttt{multirow}, para gestionar filas o columnas que se expanden en múltiples
 celdas de la parrilla de diseño de la tabla.
 
@@ -87,10 +87,9 @@ celdas de la parrilla de diseño de la tabla.
 \begin{table}[hb]
     \centering
     \caption{Segundo ejemplo de tabla, esta vez usando el estilo que define el paquete \texttt{booktabs}.}
-    \label{tbl:table-id}
+    \label{tbl:ejemplo-booktabs}
     % The @{} symbol reduce the space at the edges of some of the widest tables 
     % by shortening the horizontal rules
-    
     \begin{tabular}{@{}lcccccl@{}}\toprule
         & \multicolumn{3}{c}{$\mathrm{tol}=u_{single}$} & \multicolumn{3}{c}{$\mathrm{tol}=u_{double}$}
         \\\cmidrule(lr){2-4}\cmidrule(lr){5-7}
